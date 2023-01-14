@@ -12,13 +12,21 @@ const App = () => {
   const handleAddPerson = (event) => {
     event.preventDefault();
     console.log('btn clicked', event.target);
+    console.log(newName);
+    console.log(people);
 
-    const newPersonObj = {
-      name: newName
+    if (typeof people.find((person) => person.name === newName) !== 'undefined') {
+      alert(`${newName} is already added in the Phonebook!`)
+      setNewName('')
     }
-
-    setPeople(people.concat(newPersonObj))
-    setNewName('')
+    else {
+      const newPersonObj = {
+        name: newName
+      }
+  
+      setPeople(people.concat(newPersonObj))
+      setNewName('')
+    }
   }
 
   const handleNameChange = (event) => {
