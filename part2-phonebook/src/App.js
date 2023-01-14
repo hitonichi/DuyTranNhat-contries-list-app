@@ -4,12 +4,20 @@ import { useState } from 'react'
 import Person from './components/Person';
 
 const App = () => {
-  const [people, setPeople] = useState([
-    { name: 'Arto Hellas',
-      number: '040-1234567' }
-  ]) 
+  const peopleList = [
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ]
+  const [people, setPeople] = useState(peopleList) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [newFilter, setNewFilter] = useState('')
+
+  const peopleToShow = newFilter === ''
+      ? peopleList
+      : peopleList.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
 
   const handleAddPerson = (event) => {
     event.preventDefault();
@@ -43,9 +51,27 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    // console.log(event.target.value);
+    setNewFilter(event.target.value)
+    // console.log(newFilter);
+    // if (newFilter !== '') {
+    //   const peopleToShow = peopleList.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
+    //   console.log(peopleToShow);
+    //   setPeople(peopleToShow)
+    // }
+
+    // console.log(newFilter);
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <input
+        value={newFilter}
+        onChange={handleFilterChange}
+        placeholder='find your contacts'></input>
+      <h2>Add new Contacts</h2>
       <form onSubmit={handleAddPerson}>
         <div>
           name:
@@ -55,7 +81,7 @@ const App = () => {
             placeholder='new person...'></input>
         </div>
         <div>
-          number:
+          Contacts:
           <input
             value={newNumber}
             onChange={handleNumberChange}
@@ -67,7 +93,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {people.map(person => <Person key={person.name} person={person}></Person>)}
+        {peopleToShow.map(person => <Person key={person.name} person={person}></Person>)}
       </ul>
     </div>
   )
