@@ -9,15 +9,12 @@ function App() {
   const [newFilter, setNewFilter] = useState('')
   
   useEffect(() => {
-    console.log('effect');
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
-        console.log(response.data);
         setCountries(response.data);
       })
   }, [])
-  console.log('got', countries.length, 'nations');
 
 
   const countriesToShow = newFilter === ''
@@ -26,6 +23,11 @@ function App() {
   
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value)
+  }
+
+  const handleBtnClick = (event) => {
+    console.log(event.target);
+    setNewFilter(event.target.id)
   }
 
   if (countriesToShow.length > 10) {
@@ -48,7 +50,13 @@ function App() {
       return (
         <div>
         <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}></Filter>
-        {countriesToShow.map(country => (<div key={country.name.official}>{country.name.official}</div>))}
+        {countriesToShow.map(country => (
+          <div key={country.name.official}>
+            <div>{country.name.official}</div>
+            <button id={country.name.official} onClick={(event) => handleBtnClick(event)}>Show</button>
+            <br></br>
+          </div>
+          ))}
       </div>
       );
   }
