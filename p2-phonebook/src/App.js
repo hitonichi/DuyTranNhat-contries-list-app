@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Persons from './components/Persons';
 import Form from './components/Form';
 import Filter from './components/Filter';
+import Notification from './components/Notification';
 import personService from './services/phonebook';
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [msg, setMsg] = useState(null)
 
   useEffect(() => {
     console.log('effect');
@@ -54,6 +56,11 @@ const App = () => {
           setPeople(people.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+
+          setMsg(`${newName} has been registered.`)
+          setTimeout(() => {
+            setMsg(null)
+          }, 1500)
         })
     }
   }
@@ -91,7 +98,7 @@ const App = () => {
   } 
 
   const handleUpdateNumber = id => {
-    if (window.confirm(`Do you wanna update new number to ${peopleToShow}?`)) {
+    if (window.confirm(`Do you wanna update new number for ${people.find(p => p.id === id).name}?`)) {
       const updatedPerson = {
         name: newName,
         number: newNumber
@@ -102,6 +109,11 @@ const App = () => {
           setPeople(peopleToShow.map(p => p.id !== id ? p : updatedPerson))
           setNewName('')
           setNewNumber('')
+
+          setMsg(`Number of ${people.find(p => p.id === id).name} has been changed.`)
+          setTimeout(() => {
+            setMsg(null)
+          }, 1500)
         })
     }
   }
@@ -109,6 +121,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification msg={msg}></Notification>
+
       <Filter
         newFilter={newFilter}
         handleFilterChange={handleFilterChange}>
