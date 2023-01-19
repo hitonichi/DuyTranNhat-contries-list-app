@@ -52,7 +52,6 @@ const App = () => {
   }
 
   const handleNameChange = (event) => {
-    // console.log(event.target.value);
     setNewName(event.target.value)
   }
 
@@ -61,16 +60,7 @@ const App = () => {
   }
 
   const handleFilterChange = (event) => {
-    // console.log(event.target.value);
     setNewFilter(event.target.value)
-    // console.log(newFilter);
-    // if (newFilter !== '') {
-    //   const peopleToShow = peopleList.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
-    //   console.log(peopleToShow);
-    //   setPeople(peopleToShow)
-    // }
-
-    // console.log(newFilter);
   }
 
   return (
