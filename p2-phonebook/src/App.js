@@ -36,9 +36,11 @@ const App = () => {
     console.log(people);
 
     if (typeof people.find((person) => person.name === newName) !== 'undefined') {
-      alert(`${newName} is already added in the Phonebook!`)
-      setNewName('')
-      setNewNumber('')
+      // console.log();
+      // alert(`${newName} is already added in the Phonebook!`)
+      // setNewName('')
+      // setNewNumber('')
+      handleUpdateNumber(people[people.findIndex((person) => person.name === newName)].id)
     }
     else {
       const newPersonObj = {
@@ -70,7 +72,7 @@ const App = () => {
 
   const deleteEntryOf = id => {
     if (window.confirm(
-      `Do you wanna delete ${peopleToShow[id - 1].name}?`
+      `Do you wanna delete ${people[id - 1].name}?`
     )) {
       personService
         .remove(id)
@@ -87,6 +89,22 @@ const App = () => {
         })
     }
   } 
+
+  const handleUpdateNumber = id => {
+    if (window.confirm(`Do you wanna update new number to ${peopleToShow}?`)) {
+      const updatedPerson = {
+        name: newName,
+        number: newNumber
+      }
+      personService
+        .update(id, updatedPerson)
+        .then(returnedPerson => {
+          setPeople(peopleToShow.map(p => p.id !== id ? p : updatedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
+  }
 
   return (
     <div>
