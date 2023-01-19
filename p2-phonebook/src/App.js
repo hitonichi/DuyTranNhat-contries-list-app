@@ -17,7 +17,12 @@ const App = () => {
     personService
       .getAll()
       .then(initPeople => {
+        console.log('got');
         setPeople(initPeople)
+        console.log(initPeople);
+      })
+      .catch(e => {
+        console.log('FAIL', e);
       })
   }, [])
 
@@ -63,6 +68,26 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
+  const deleteEntryOf = id => {
+    if (window.confirm(
+      `Do you wanna delete ${peopleToShow[id - 1].name}?`
+    )) {
+      personService
+        .remove(id)
+        .then(() => {
+          console.log('deleted entry');
+          personService
+            .getAll()
+            .then(initPeople => {
+              setPeople(initPeople)
+            })
+        })
+        .catch(e => {
+          console.log('delete FAIL', e);
+        })
+    }
+  } 
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -80,7 +105,7 @@ const App = () => {
       </Form>
       
       <h2>Numbers</h2>
-      <Persons peopleToShow={peopleToShow}></Persons>
+      <Persons peopleToShow={peopleToShow} handleDelete={deleteEntryOf}></Persons>
     </div>
   )
 }
