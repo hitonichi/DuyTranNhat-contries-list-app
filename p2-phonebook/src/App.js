@@ -5,6 +5,7 @@ import Persons from './components/Persons';
 import Form from './components/Form';
 import Filter from './components/Filter';
 import Notification from './components/Notification';
+import Error from './components/Error';
 import personService from './services/phonebook';
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [msg, setMsg] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   useEffect(() => {
     console.log('effect');
@@ -115,6 +117,17 @@ const App = () => {
             setMsg(null)
           }, 1500)
         })
+        .catch(e => {
+          setErrorMsg(`Info. of ${people.find(p => p.id === id).name} has already been removed from the server`)
+          setTimeout(() => {
+            setErrorMsg(null)
+          }, 1500)
+          personService
+            .getAll()
+            .then(returnedList => {
+              setPeople(returnedList)
+            })
+        })
     }
   }
 
@@ -123,6 +136,7 @@ const App = () => {
       <h2>Phonebook</h2>
 
       <Notification msg={msg}></Notification>
+      <Error msg={errorMsg}></Error>
 
       <Filter
         newFilter={newFilter}
